@@ -1,0 +1,56 @@
+---
+- name: installing apache tomcat
+  hosts: rhel
+  gather_facts: yes
+  become: true
+  vars:
+    tomcat_url: https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.85/bin/apache-tomcat-8.5.85.tar.gz
+    tomcat_pkg: apache-tomcat-8.5.85
+  tasks:
+    - name: installing java
+      yum:
+        name: java
+        state: installed
+      when: ansible_os_family == "RedHat"
+
+    - name: installing java
+      yum:
+        name: java
+        state: latest
+      when: ansible_os_family == "Debian"
+
+    - name: downloading {{ tomcat_pkg }}
+      get_url:
+        url: "{{ tomcat_url }}"
+        dest: /opt
+        mode: 0755
+
+    - name: extract {{ tomcat_pkg }}
+      unarchive:
+        src: /opt/{{ tomcat_pkg }}.tar.gz
+        dest: /opt
+        remote_src: yes
+
+    - name: change perminssion
+      file:
+        path: /opt/{{ tomcat_pkg }}
+        mode: 0755
+        recurse: yes
+
+
+    - name: creating startup link
+      file:
+        src: /opt/{{ tomcat_pkg }}/bin/startup.sh
+        dest: /usr/bin/tomcatup
+        state: link
+
+    - name: creating shutdown link
+      file:
+        src:  /opt/{{ tomcat_pkg }}/bin/shutdown.sh
+        dest: /usr/bin/tomcatdown
+        state: link
+
+    - name: start tomcat services
+      command: nohup tomcatup
+
+

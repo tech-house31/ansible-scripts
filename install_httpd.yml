@@ -1,0 +1,21 @@
+---
+- name: installing httpd
+  hosts:  all
+  gather_facts: yes
+  become: true
+  tasks:
+
+  - name:
+    yum:
+      name: httpd
+      state: latest
+
+  - name:
+    service:
+      name: httpd
+      state: started
+
+  - name:
+    copy:
+      src: /home/ansadmin/ansible-plays/index.html
+      dest: /var/www/html

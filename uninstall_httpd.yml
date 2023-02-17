@@ -1,0 +1,11 @@
+---
+- name: installing httpd
+  hosts:  all
+  gather_facts: yes
+  become: true
+  tasks:
+
+  - name:
+    yum:
+      name: httpd
+      state: absent

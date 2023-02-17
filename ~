@@ -1,0 +1,21 @@
+---
+- name: copying and creating files and directories
+  hosts: all
+  gather_facts: yes
+  become: true
+  tasks:
+    - name: creating a directory
+      file:
+        path: /home/ansadmin/new-dir
+        state: directory
+    - name: creating files
+      file:
+        path: /home/ansadmin/file3
+        state:  touch
+
+    - name: copying the files into directory
+      copy:
+        src: /home/ansadmin/file3
+        dest: /home/ansadmin/new-dir
+
+        remote_src: yes

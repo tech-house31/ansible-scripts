@@ -1,0 +1,10 @@
+---
+- name: using with items
+  hosts: all
+  become: true
+  tasks:
+
+  - name: un-installing packages
+    yum:
+      name: ['wget', 'tree']
+      state: absent

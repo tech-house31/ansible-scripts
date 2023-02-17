@@ -1,0 +1,39 @@
+---
+- name: install httpd and apache2 on rhel and ubuntu server
+  hosts: all
+  gather_facts: yes
+  become: true
+  tasks:
+
+  - name: installing httpd
+    yum:
+      name: httpd
+      state: installed
+    when: ansible_os_family == "RedHat"
+    notify: start httpd
+
+  - name: installing apache
+    apt:
+      name: apache2
+      state: present
+    when: ansible_os_family == "Debian"
+    notify: start debian
+
+  handlers:
+  - name: start httpd
+    service:
+      name: httpd
+      state: started
+    when: ansible_os_family == "RedHat"
+  
+  handlers:
+  - name: start debian
+    service:
+      name: apache2
+      state: started
+    when: ansible_os_family == "Debian"
+
+  - name: copying file to index
+    copy:
+      src: /home/ansadmin/ansible-plays/index.html
+      dest: /var/www/html

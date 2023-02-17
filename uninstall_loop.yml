@@ -1,0 +1,16 @@
+---
+- name: working with loops
+  hosts:  all
+  become: true
+  tasks:
+
+  - name: installing packages with loops
+    yum:
+      name: "{{ item.pkg }}"
+      state:  "{{ item.setup }}"
+
+    loop:
+      - { pkg: 'git', setup: 'absent'}
+      - { pkg: 'make', setup: 'absent'}
+      - { pkg: 'wget', setup: 'absent'}
+      - { pkg: 'tree', setup: 'absent'}

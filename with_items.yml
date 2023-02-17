@@ -1,0 +1,13 @@
+---
+- name: using with items
+  hosts: all
+  become: true
+  tasks:
+
+  - name: installing packages
+    yum:
+      name: "{{ item }}"
+    with_items:
+      - git
+      - tree
+      - wget
